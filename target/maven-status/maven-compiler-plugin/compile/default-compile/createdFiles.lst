@@ -1,0 +1,5 @@
+com\mycompany\algumalex\AlgumaLexico.class
+com\mycompany\algumalex\LeitorDeArquivosTexto.class
+com\mycompany\algumalex\TipoToken.class
+com\mycompany\algumalex\AlgumaLex.class
+com\mycompany\algumalex\Token.class
