@@ -12,7 +12,7 @@ public class AlgumaLex {
 
     public static void main(String[] args) {
         if (args.length == 0) {
-            System.out.println("C:\\Users\\ferre\\OneDrive\\Área de Trabalho\\codigo.txt");
+            System.out.print("C:\\Users\\ferre\\OneDrive\\Área de Trabalho\\codigo.txt");
             return;
         }
 

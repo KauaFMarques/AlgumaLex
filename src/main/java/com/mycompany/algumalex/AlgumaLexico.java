@@ -21,18 +21,46 @@ public class AlgumaLexico {
 
         while ((caractereLido = ldat.lerProximoCaractere()) != -1) {
             char c = (char) caractereLido;
-
-            if (Character.isWhitespace(c)) {
-                // Pular espaços em branco e novas linhas
-                if (lexema.length() > 0) {
-                    // Criar um token com o lexema atual
-                    Token token = criarToken(lexema.toString());
-                    lexema.setLength(0); // Limpar o lexema
-                    return token;
-                }
+            if (c == ' ' || c == '\n')
                 continue;
+
+            // Delimitador e Operadores Aritméticos
+            if (c == ':') {
+                return new Token(TipoToken.Delim, ":");
+            } else if (c == '*') {
+                return new Token(TipoToken.PCAritMult, "*");
+            } else if (c == '+') {
+                return new Token(TipoToken.PCAritSom, "+");
+            } else if (c == '-') {
+                return new Token(TipoToken.PCAritSub, "-");
+            } else if (c == '/') {
+                return new Token(TipoToken.PCAritDiv, "/");
             }
 
+            // Operadores Relacionais
+            else if (c == '>') {
+                char next = (char) ldat.lerProximoCaractere();
+                if (next == '=') {
+                    return new Token(TipoToken.OpRelMaiorIgual, ">=");
+                } else {
+                    ldat.retrocederCaractere(); // Se não for '=', volta o caractere
+                    return new Token(TipoToken.OpRelMaior, ">");
+                }
+            } else if (c == '<') {
+                char next = (char) ldat.lerProximoCaractere();
+                if (next == '=') {
+                    return new Token(TipoToken.OpRelMenorIgual, "<=");
+                } else if (next == '>') {
+                    return new Token(TipoToken.OpRelDif, "<>");
+                } else {
+                    ldat.retrocederCaractere();
+                    return new Token(TipoToken.OpRelMenor, "<");
+                }
+            } else if (c == '=') {
+                return new Token(TipoToken.OpRelIgual, "=");
+            }
+
+            // Caso não seja nenhum símbolo reconhecido, continuar lendo caracteres para formar um lexema
             lexema.append(c);
         }
 
@@ -46,8 +74,15 @@ public class AlgumaLexico {
 
     private Token criarToken(String lexema) {
         // Lógica para criar tokens com base no lexema
-        // Exemplo simplificado: Se o lexema é uma palavra-chave, crie um Token do tipo correspondente
-        TipoToken tipo = TipoToken.Var; // Substitua isso pela lógica real
-        return new Token(tipo, lexema);
+        // Exemplo: Se o lexema é uma palavra-chave ou identificador, crie um Token do tipo correspondente
+        switch (lexema) {
+            case "algoritmo":
+                return new Token(TipoToken.PCAlgoritmo, lexema);
+            case "declaracoes":
+                return new Token(TipoToken.PCDeclaracoes, lexema);
+            // Adicione mais palavras-chave aqui conforme necessário
+            default:
+                return new Token(TipoToken.Var, lexema); // Assumindo que seja um identificador (variável)
+        }
     }
 }

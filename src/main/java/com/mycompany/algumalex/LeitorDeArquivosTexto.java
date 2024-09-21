@@ -17,9 +17,11 @@ import java.util.logging.Logger;
  * @author ferre
  */
 public class LeitorDeArquivosTexto {
-    InputStream is;
+    private InputStream is;
+    private int ultimoCaractere = -1; // Para armazenar o último caractere lido
+    private boolean podeRetroceder = false; // Para indicar se podemos retroceder
 
-    public LeitorDeArquivosTexto(String arquivo){
+    public LeitorDeArquivosTexto(String arquivo) {
         try {
             is = new FileInputStream(new File(arquivo));
         } catch (FileNotFoundException ex) {
@@ -27,14 +29,25 @@ public class LeitorDeArquivosTexto {
         }
     }
 
-    public int lerProximoCaractere(){
+    public int lerProximoCaractere() {
         try {
-            int ret = is.read();
-            System.out.println((char) ret);  // Apenas para fins de depuração
-            return ret;  // Aqui faltava o retorno
+            if (podeRetroceder) {
+                podeRetroceder = false;
+                return ultimoCaractere; // Retorna o caractere anterior se estiver em modo "retroceder"
+            }
+
+            ultimoCaractere = is.read();
+            System.out.print((char) ultimoCaractere);  // Apenas para fins de depuração
+            return ultimoCaractere; // Retorna o próximo caractere do arquivo
         } catch (IOException ex) {
             Logger.getLogger(LeitorDeArquivosTexto.class.getName()).log(Level.SEVERE, null, ex);
             return -1;
+        }
+    }
+
+    public void retrocederCaractere() {
+        if (ultimoCaractere != -1) {
+            podeRetroceder = true; // Ativa o modo "retroceder"
         }
     }
 }
