@@ -53,7 +53,7 @@ public class AlgumaLexico {
                 } else if (next == '>') {
                     return new Token(TipoToken.OpRelDif, "<>");
                 } else {
-                    ldat.retrocederCaractere();
+                    ldat.retroceder();
                     return new Token(TipoToken.OpRelMenor, "<");
                 }
             } else if (c == '=') {
