@@ -71,6 +71,66 @@ public class AlgumaLexico {
 
         return null; // Fim do arquivo
     }
+    
+    private Token operadorAritmetico(){
+        int caractereLido = ldat.lerProximoCaractere();
+        char c=(char) caractereLido;
+        
+        if (c == ':') {
+                return new Token(TipoToken.Delim, ":");
+            } else if (c == '*') {
+                return new Token(TipoToken.PCAritMult, "*");
+            } else if (c == '+') {
+                return new Token(TipoToken.PCAritSom, "+");
+            } else if (c == '-') {
+                return new Token(TipoToken.PCAritSub, "-");
+            } else if (c == '/') {
+                return new Token(TipoToken.PCAritDiv, "/");
+            }else{
+                return null;
+            }
+    }
+    
+    private Token delimitador(){
+        int caractereLido = ldat.lerProximoCaractere();
+        char c=(char) caractereLido;
+        
+        if (c == ':'){
+            return new Token(TipoToken.Delim,":");
+        }else{
+            return null;
+        }
+    }
+    
+    private Token operadorRelacional() {
+        int caractereLido = ldat.lerProximoCaractere();
+        char c = (char) caractereLido;
+
+        if (c == '<') {
+            char next = (char) ldat.lerProximoCaractere();
+            if (next == '=') {
+                return new Token(TipoToken.OpRelMenorIgual, "<=");
+            } else if (next == '>') {
+                return new Token(TipoToken.OpRelDif, "<>");
+            } else {
+                ldat.retroceder();
+                return new Token(TipoToken.OpRelMenor, "<");
+            }
+        } else if (c == '>') {
+            char next = (char) ldat.lerProximoCaractere();
+            if (next == '=') {
+                return new Token(TipoToken.OpRelMaiorIgual, ">=");
+            } else {
+                ldat.retroceder();
+                return new Token(TipoToken.OpRelMaior, ">");
+            }
+        } else if (c == '=') {
+            return new Token(TipoToken.OpRelIgual, "=");
+        } else {
+            return null;
+        }
+    }
+
 
     private Token criarToken(String lexema) {
         // Lógica para criar tokens com base no lexema
